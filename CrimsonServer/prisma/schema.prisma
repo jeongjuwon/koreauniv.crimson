@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// 유저
+model User {
+  /// 유저 아이디(첫번째 유저가 가입하면 1번, 두번째 유저가 가입하면 2번)
+  id        Int       @id @default(autoincrement())
+  /// 유저 이메일
+  email     String    @unique
+  /// 유저 패스워드
+  password  String
+  /// 가입일
+  createdAt DateTime  @default(now())
+  /// 프로필 모델과의 관계 설정(1:n)
+  profiles  Profile[]
+}
+
+/// 클럽
+model Club {
+  /// 고유 아이디(증가되는.)
+  id          Int       @id @default(autoincrement())
+  /// 클럽이름
+  name        String
+  /// 클럽이미지
+  image       String
+  /// 클럽설명
+  description String?
+  /// 프로필 모델과의 관계 설정(1:n)
+  profiles    Profile[]
+  /// 아티클 모델과의 관계 설정(1:n)
+  articles    Article[]
+  /// 코멘트 모델과의 관계 설정(1:n)
+  comments    Comment[]
+}
+
+/// 클럽별 프로필
+model Profile {
+  /// 고유 아이디
+  id        Int       @id @default(autoincrement())
+  /// 닉네임
+  name      String
+  /// 클럽 고유 아이디
+  clubId    Int
+  /// 유저 고유 아이디
+  userId    Int
+  /// 생성일
+  createdAt DateTime  @default(now())
+  /// 유저 모델과의 관계 설정
+  user      User      @relation(fields: [userId], references: [id])
+  /// 클럽 모델과의 관계 설정
+  club      Club      @relation(fields: [clubId], references: [id])
+  /// 아티클 모델과의 관계 설정(1:n)
+  articles  Article[]
+  /// 코멘트 모델과의 관계 설정(1:n)
+  comments  Comment[]
+}
+
+/// 게시물
+model Article {
+  /// 게시물 아이디
+  id        Int       @id @default(autoincrement())
+  /// 게시물 제목
+  title     String
+  /// 게시물 내용
+  content   String
+  /// 생성일
+  createdAt DateTime  @default(now())
+  /// 수정일
+  updatedAt DateTime?
+  /// 삭제일
+  deletedAt DateTime?
+  /// 삭제 여부
+  isDeleted Boolean   @default(false)
+  /// 클럽 아이디
+  clubId    Int
+  /// 프로필 아이디
+  profileId Int
+  /// 프로필 모델과의 관계 설정
+  profile   Profile   @relation(fields: [profileId], references: [id])
+  /// 클럽 모델과의 관계 설정
+  club      Club      @relation(fields: [clubId], references: [id])
+  /// 코멘트 모델과의 관계 설정(1:n)
+  comments  Comment[]
+}
+
+/// 게시물 댓글
+model Comment {
+  /// 댓글 아이디
+  id        Int      @id @default(autoincrement())
+  /// 댓글(내용)
+  content   String
+  /// 생성일
+  createdAt DateTime @default(now())
+  /// 게시물 아이디
+  articleId Int
+  /// 프로필 아이디
+  authorId  Int
+  /// 클럽 아이디
+  clubId    Int
+  /// 게시물 모델과의 관계 설정
+  article   Article  @relation(fields: [articleId], references: [id])
+  /// 프로필 모델과의 관계 설정
+  profile   Profile  @relation(fields: [authorId], references: [id])
+  /// 클럽 모델과의 관계 설정
+  club      Club     @relation(fields: [clubId], references: [id])
+}
