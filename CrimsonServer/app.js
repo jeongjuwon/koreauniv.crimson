@@ -10,6 +10,9 @@ const logger = require("morgan");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
+const clubsRouter = require("./routes/clubs");
+const profileRouter = require("./routes/profile");
+const token = require("./middlewares/token");
 
 // 익스프레스를 초기화 하는 단계입니다.
 // https://expressjs.com/en/starter/hello-world.html
@@ -26,11 +29,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(token);
 
 // 우리가 직접 생성한 라우터를 연결하는 구간
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
+app.use("/clubs", clubsRouter);
+app.use("/clubProfile", profileRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -44,9 +50,9 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(err.status || 400);
   res.json({
-    errorCode: err.status || 500,
+    status: err.status || 400,
     errorMsg: err.message,
   });
 });

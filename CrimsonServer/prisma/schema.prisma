@@ -62,6 +62,8 @@ model Profile {
   articles  Article[]
   /// 코멘트 모델과의 관계 설정(1:n)
   comments  Comment[]
+
+  @@unique([clubId, userId], name: "clubId_userId_unique_key")
 }
 
 /// 게시물

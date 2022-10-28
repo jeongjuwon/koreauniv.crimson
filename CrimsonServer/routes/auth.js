@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { PrismaClient } = require("@prisma/client");
 const { encryptPassword, matchPassword } = require("../libs/encryptPassword");
 const jwt = require("jsonwebtoken");
-const prismaClient = new PrismaClient();
+
+const prismaClient = require("../libs/prisma");
 
 /* GET home page. */
 router.post("/signUp", async function (req, res, next) {
@@ -44,11 +44,11 @@ router.post("/signIn", async function (req, res, next) {
 
   try {
     if (!email) {
-      throw new Error("이메일이 없습니다.");
+      next(new Error("이메일이 없습니다."));
     }
 
     if (!password) {
-      throw new Error("패스워드가 없습니다.");
+      next(new Error("패스워드가 없습니다."));
     }
 
     const user = await prismaClient.user.findUnique({
@@ -58,13 +58,13 @@ router.post("/signIn", async function (req, res, next) {
     });
 
     if (!user) {
-      throw new Error("잘못된 계정 정보입니다.");
+      next(new Error("잘못된 계정 정보입니다."));
     }
 
     console.log("matchPassword", matchPassword(password, user.password));
 
     if (matchPassword(password, user.password) === false) {
-      throw new Error("잘못된 계정 정보입니다.");
+      next(new Error("잘못된 계정 정보입니다."));
     }
 
     const token = jwt.sign(
@@ -79,7 +79,7 @@ router.post("/signIn", async function (req, res, next) {
       token,
     });
   } catch (e) {
-    throw e;
+    next(e);
   }
 });
 

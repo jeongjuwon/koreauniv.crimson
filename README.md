@@ -19,9 +19,9 @@ git clone https://github.com/jeongjuwon/koreauniv.crimson.git
 ## 앱 실행 방법
 
 ```
-cd CrimsonProjet
-npm install
-npx pod-install
+cd CrimsonProject
+npm install <= 처음 다운로드 받거나 package.json에 변경 사항이 있을 때
+npx pod-install <= 처음 다운로드 받거나 package.json에 변경 사항이 있을 때
 npx react-native run-ios
 npx react-native run-android
 ```
@@ -30,6 +30,6 @@ npx react-native run-android
 
 ```
 cd CrimsonServer
-npm install
+npm install <= 처음 다운로드 받거나 package.json에 변경 사항이 있을 때
 DEBUG=crimsonserver:* npm start
 ```

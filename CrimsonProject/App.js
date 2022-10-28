@@ -5,113 +5,79 @@
  * @format
  * @flow strict-local
  */
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import ClubHomeScreen from './src/screens/ClubHomeScreen';
+import ClubListScreen from './src/screens/ClubListScreen';
+import SignInScreen from './src/screens/SignInScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Stack = createNativeStackNavigator();
 
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+const App = () => {
+  const [userToken, setUserToken] = useState(null);
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const saveUserToken = useCallback(async token => {
+    // async storage에 저장
+    await AsyncStorage.setItem('token', token);
+    setUserToken(token);
+  }, []);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  useEffect(() => {
+    async function init() {
+      const token = await AsyncStorage.getItem('token');
+      setUserToken(token);
+    }
+    init();
+  }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="SignIn">
+        {userToken ? (
+          <>
+            <Stack.Screen
+              name="ClubList"
+              component={ClubListScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ClubHome"
+              component={ClubHomeScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="SignIn"
+              component={SignInScreen}
+              options={{
+                headerShown: false,
+              }}
+              initialParams={{
+                saveUserToken,
+              }}
+            />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUpScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
