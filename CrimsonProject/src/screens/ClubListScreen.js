@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ImageBackground, Pressable, ScrollView, StyleSheet } from 'react-native';
 
@@ -33,25 +34,33 @@ const ClubListScreen = ({navigation, route}) => {
   }, []);
 
   const onPressClub = useCallback(
-    club => async () => {
-      // const token = await AsyncStorage.getItem('token');
-      // const response = await fetch('http://localhost:3000/clubProfile', {
-      //   method: 'GET',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
-      // const profile = await response.json();
+    clubId => async () => {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(
+        `http://localhost:3000/profile?clubId=${clubId}`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const profile = await response.json();
 
-      // if (!profile) {
-      //   navigation.navgate('ClubJoin');
-      // } else {
-      //   navigation.navgate('ClubHome');
-      // }
+      console.log('profile', profile);
+      // {"id": null}
 
-      navigation.navigate('ClubHome');
+      if (!profile.id) {
+        navigation.navigate('ClubJoin', {
+          clubId,
+        });
+      } else {
+        navigation.navigate('ClubHome', {
+          clubId,
+        });
+      }
     },
     [navigation],
   );
@@ -62,9 +71,10 @@ const ClubListScreen = ({navigation, route}) => {
         {clubs.map(club => {
           return (
             <ClubListItem
+              key={club.id}
               name={club.name}
               image={club.image}
-              onPress={onPressClub(club)}
+              onPress={onPressClub(club.id)}
             />
           );
         })}

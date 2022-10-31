@@ -11,9 +11,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import ClubHomeScreen from './src/screens/ClubHomeScreen';
+import ClubJoinScreen from './src/screens/ClubJoinScreen';
 import ClubListScreen from './src/screens/ClubListScreen';
 import SignInScreen from './src/screens/SignInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
+import WriteArticleScreen from './src/screens/WriteArticleScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +51,20 @@ const App = () => {
             <Stack.Screen
               name="ClubHome"
               component={ClubHomeScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ClubJoin"
+              component={ClubJoinScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="WriteArticle"
+              component={WriteArticleScreen}
               options={{
                 headerShown: false,
               }}

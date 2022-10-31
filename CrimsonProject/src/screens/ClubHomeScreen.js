@@ -1,116 +1,18 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React from 'react';
-import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import ArticleListItem from '../components/ArticleListItem';
 import ClubListItem from '../components/ClubListItem';
+import FAB from '../components/FAB';
 import PublicText from '../components/PublicText';
 import ScreenContainer from '../components/ScreenContainer';
 
 dayjs.extend(relativeTime);
-
-const articles = [
-  {
-    id: 10,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-  {
-    id: 9,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-  {
-    id: 8,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-  {
-    id: 7,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-  {
-    id: 6,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-  {
-    id: 5,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-  {
-    id: 4,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-  {
-    id: 3,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-  {
-    id: 2,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-  {
-    id: 1,
-    title: '제목입니다!!',
-    content: '내용을 입력했습니다!!',
-    authorName: 'boiledegg',
-    createdAt: new Date(),
-  },
-];
-
-const DEFAULT_PROFILE_IMAGE = require('../assets/images/default-profile.png');
-
-const ListItem = ({
-  index,
-  profileImage,
-  title,
-  content,
-  authorName,
-  createdAt,
-  onPress,
-}) => {
-  // 프로필 이미지 | 이름
-  //            | 날짜
-  return (
-    <Pressable style={listItemStyles.container(index)}>
-      <View style={listItemStyles.profileContainer}>
-        <Image
-          source={profileImage ? {uri: profileImage} : DEFAULT_PROFILE_IMAGE}
-          style={listItemStyles.profileImage}
-        />
-        <View style={listItemStyles.authorContainer}>
-          <PublicText>{authorName}</PublicText>
-          <PublicText>{dayjs().from(dayjs(createdAt))}</PublicText>
-        </View>
-      </View>
-    </Pressable>
-  );
-};
+const COVER_IMAGE_HEIGHT = 200;
 
 const ListHeaderComponent = props => {
   const insets = useSafeAreaInsets();
@@ -119,14 +21,67 @@ const ListHeaderComponent = props => {
       style={[
         headerComponentStyle.container,
         {
-          marginTop: 200 + insets.top,
+          marginTop: COVER_IMAGE_HEIGHT + insets.top,
         },
       ]}
     />
   );
 };
 
-const ClubHomeScreen = props => {
+const ListEmptyComponent = props => {
+  const window = useWindowDimensions();
+
+  const height = window.height - COVER_IMAGE_HEIGHT;
+
+  return (
+    <View style={[emptyComponentStyle.container(height)]}>
+      <PublicText style={emptyComponentStyle.title}>
+        등록된 게시물이 없습니다.
+      </PublicText>
+    </View>
+  );
+};
+
+const ClubHomeScreen = ({navigation, route}) => {
+  const {clubId} = route.params;
+  const keyExtractor = useCallback(item => item.id, []);
+
+  // 초기값 articles: []
+  // const articles = [
+  //   {
+  //     id: 1,
+  //     title: '제목입니다!!',
+  //     content: '내용을 입력했습니다!!',
+  //     authorName: 'boiledegg',
+  //     createdAt: new Date(),
+  //   },
+  // ];
+  const [articles, setArticles] = useState([]);
+
+  const initArticles = useCallback(async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await fetch(`http://localhost:3000/articles/${clubId}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const json = await response.json();
+      console.log(json);
+      setArticles(json);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [clubId]);
+
+  // 홈이 로드되었을때 api 호출
+  useEffect(() => {
+    initArticles();
+  }, [clubId, initArticles]);
+
   return (
     <ScreenContainer>
       <ClubListItem
@@ -136,13 +91,15 @@ const ClubHomeScreen = props => {
       />
       <FlatList
         data={articles}
+        keyExtractor={keyExtractor}
         ListHeaderComponent={ListHeaderComponent}
+        ListEmptyComponent={ListEmptyComponent}
         style={styles.flatList}
         renderItem={({item, index}) => {
           return (
-            <ListItem
+            <ArticleListItem
               index={index}
-              authorName={item.authorName}
+              authorName={item.profile.name}
               title={item.title}
               content={item.content}
               createdAt={item.createdAt}
@@ -150,32 +107,11 @@ const ClubHomeScreen = props => {
           );
         }}
       />
+      {/* float Action Button */}
+      <FAB clubId={clubId} initArticles={initArticles} />
     </ScreenContainer>
   );
 };
-
-const listItemStyles = StyleSheet.create({
-  container: index => ({
-    paddingTop: index === 0 ? 0 : 20,
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-    borderBottomWidth: 0.5,
-    borderBottomColor: 'rgba(0,0,0, 0.2)',
-    backgroundColor: '#fff',
-  }),
-  profileImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-  },
-  profileContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  authorContainer: {
-    marginLeft: 20,
-  },
-});
 
 const headerComponentStyle = StyleSheet.create({
   container: {
@@ -183,6 +119,19 @@ const headerComponentStyle = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+});
+
+const emptyComponentStyle = StyleSheet.create({
+  container: height => ({
+    height,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  title: {
+    fontSize: 15,
+    fontWeight: '700',
   },
 });
 

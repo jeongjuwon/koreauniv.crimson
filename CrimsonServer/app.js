@@ -12,6 +12,8 @@ const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const clubsRouter = require("./routes/clubs");
 const profileRouter = require("./routes/profile");
+const articlesRouter = require("./routes/articles");
+const articleRouter = require("./routes/article");
 const token = require("./middlewares/token");
 
 // 익스프레스를 초기화 하는 단계입니다.
@@ -36,7 +38,9 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 app.use("/clubs", clubsRouter);
-app.use("/clubProfile", profileRouter);
+app.use("/profile", profileRouter);
+app.use("/articles", articlesRouter);
+app.use("/article", articleRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
