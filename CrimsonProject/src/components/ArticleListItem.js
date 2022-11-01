@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import PublicText from './PublicText';
 
@@ -10,18 +11,21 @@ dayjs.extend(relativeTime);
 const DEFAULT_PROFILE_IMAGE = require('../assets/images/default-profile.png');
 
 const ArticleListItem = ({
+  paddingBottom,
   index,
   profileImage,
   title,
   content,
   authorName,
   createdAt,
-  onPress,
+  onPressArticle,
 }) => {
   // 프로필 이미지 | 이름
   //            | 날짜
   return (
-    <Pressable style={listItemStyles.container(index)}>
+    <Pressable
+      style={listItemStyles.container(index, paddingBottom)}
+      onPress={onPressArticle}>
       <View style={listItemStyles.profileContainer}>
         <Image
           source={profileImage ? {uri: profileImage} : DEFAULT_PROFILE_IMAGE}
@@ -41,10 +45,10 @@ const ArticleListItem = ({
 };
 
 const listItemStyles = StyleSheet.create({
-  container: index => ({
+  container: (index, paddingBottom) => ({
     paddingTop: index === 0 ? 0 : 20,
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: paddingBottom + 20,
     borderBottomWidth: 0.5,
     borderBottomColor: 'rgba(0,0,0, 0.2)',
     backgroundColor: '#fff',

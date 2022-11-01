@@ -1,8 +1,15 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
-const ScreenContainer = ({children}) => {
-  return <SafeAreaView style={{flex: 1}}>{children}</SafeAreaView>;
+const ScreenContainer = ({children, style}) => {
+  return (
+    <SafeAreaView style={[styles.container, style]}>{children}</SafeAreaView>
+  );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 export default ScreenContainer;

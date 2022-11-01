@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useCallback, useEffect, useState } from 'react';
-import { ImageBackground, Pressable, ScrollView, StyleSheet } from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {ImageBackground, Pressable, ScrollView, StyleSheet} from 'react-native';
 
 import PublicText from '../components/PublicText';
 import ScreenContainer from '../components/ScreenContainer';
@@ -59,6 +59,7 @@ const ClubListScreen = ({navigation, route}) => {
       } else {
         navigation.navigate('ClubHome', {
           clubId,
+          profile,
         });
       }
     },

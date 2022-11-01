@@ -27,7 +27,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>1</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>1</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -43,8 +43,6 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -59,6 +57,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
+	<key>UIAppFonts</key>
+	<array>
+		<string>GoDigANiGoGoDing.ttf</string>
+		<string>NanumGothic.ttf</string>
+		<string>NanumGothicBold.ttf</string>
+		<string>NanumGothicExtraBold.ttf</string>
+		<string>NanumGothicLight.ttf</string>
+		<string>NanumSquareNeo-aLt.ttf</string>
+		<string>NanumSquareNeo-bRg.ttf</string>
+		<string>NanumSquareNeo-cBd.ttf</string>
+		<string>NanumSquareNeo-dEb.ttf</string>
+		<string>NanumSquareNeo-eHv.ttf</string>
+	</array>
 </dict>
 </plist>

@@ -6,15 +6,16 @@
  * @flow strict-local
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useCallback, useEffect, useState } from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import ClubHomeScreen from './src/screens/ClubHomeScreen';
 import ClubJoinScreen from './src/screens/ClubJoinScreen';
 import ClubListScreen from './src/screens/ClubListScreen';
 import SignInScreen from './src/screens/SignInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
+import ViewArticleScreen from './src/screens/ViewArticleScreen';
 import WriteArticleScreen from './src/screens/WriteArticleScreen';
 
 const Stack = createNativeStackNavigator();
@@ -38,7 +39,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SignIn">
+      <Stack.Navigator initialRouteName={userToken ? 'ClubList' : 'SignIn'}>
         {userToken ? (
           <>
             <Stack.Screen
@@ -67,6 +68,14 @@ const App = () => {
               component={WriteArticleScreen}
               options={{
                 headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ViewArticle"
+              component={ViewArticleScreen}
+              options={{
+                headerShown: false,
+                headerTitle: '글보기',
               }}
             />
           </>

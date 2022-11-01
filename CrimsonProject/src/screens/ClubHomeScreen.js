@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, {useCallback, useEffect, useState} from 'react';
+import {FlatList, StyleSheet, useWindowDimensions, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import ArticleListItem from '../components/ArticleListItem';
 import ClubListItem from '../components/ClubListItem';
@@ -43,8 +43,9 @@ const ListEmptyComponent = props => {
 };
 
 const ClubHomeScreen = ({navigation, route}) => {
-  const {clubId} = route.params;
+  const {clubId, profile} = route.params;
   const keyExtractor = useCallback(item => item.id, []);
+  const inset = useSafeAreaInsets();
 
   // 초기값 articles: []
   // const articles = [
@@ -82,8 +83,18 @@ const ClubHomeScreen = ({navigation, route}) => {
     initArticles();
   }, [clubId, initArticles]);
 
+  const onPressArticle = useCallback(
+    articleId => () => {
+      navigation.navigate('ViewArticle', {
+        articleId,
+        profile,
+      });
+    },
+    [navigation, profile],
+  );
+
   return (
-    <ScreenContainer>
+    <ScreenContainer style={{backgroundColor: '#fff'}}>
       <ClubListItem
         name="학생회"
         image="/images/student_council.jpg"
@@ -98,11 +109,13 @@ const ClubHomeScreen = ({navigation, route}) => {
         renderItem={({item, index}) => {
           return (
             <ArticleListItem
+              paddingBottom={articles.length - 1 === index ? inset.bottom : 0}
               index={index}
               authorName={item.profile.name}
               title={item.title}
               content={item.content}
               createdAt={item.createdAt}
+              onPressArticle={onPressArticle(item.id)}
             />
           );
         }}

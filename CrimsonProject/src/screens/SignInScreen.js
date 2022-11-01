@@ -1,7 +1,15 @@
-import React, { useCallback, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import PublicText from '../components/PublicText';
+import CustomTextInput from '../components/TextInput';
 
 const SignInScreen = ({navigation, route}) => {
   const [email, setEmail] = useState('');
@@ -47,18 +55,18 @@ const SignInScreen = ({navigation, route}) => {
       <PublicText style={styles.title}>
         로그인 후 크림슨을 이용해 보세요!
       </PublicText>
-      <TextInput
+      <CustomTextInput
         style={styles.emailInput}
-        onChangeText={text => {
+        setValue={text => {
           console.log('text', text);
           setEmail(text.toLowerCase());
         }}
         value={email}
         placeholder="이메일을 입력해주세요."
       />
-      <TextInput
+      <CustomTextInput
         style={styles.passwordInput}
-        onChangeText={setPassword}
+        setValue={setPassword}
         value={password}
         placeholder="패스워드를 입력해주세요."
       />
