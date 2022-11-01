@@ -2,15 +2,16 @@ const express = require('express');
 const prismaClient = require('../libs/prisma');
 const router = express.Router();
 
-/* GET users listing. */
-router.get('/:clubId', async function (req, res, next) {
-  const {clubId} = req.params;
+/* GET comments listing. */
+router.get('/:articleId', async function (req, res, next) {
+  const {articleId} = req.params;
 
   try {
-    const articles = await prismaClient.article.findMany({
+    const comments = await prismaClient.comment.findMany({
       select: {
         id: true,
-        title: true,
+        authorId: true,
+        clubId: true,
         content: true,
         createdAt: true,
         profile: {
@@ -20,14 +21,13 @@ router.get('/:clubId', async function (req, res, next) {
         },
       },
       where: {
-        clubId: parseInt(clubId, 10),
+        articleId: parseInt(articleId, 10),
       },
       orderBy: {
         id: 'desc',
       },
     });
-
-    res.json(articles);
+    res.json(comments);
   } catch (e) {
     next(e);
   }
