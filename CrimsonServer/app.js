@@ -5,6 +5,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const fileUpload = require('express-fileupload');
 
 // 경로에 대한 명시가 있다면 우리가 직접 생성한 파일을 불러오는 것입니다.
 const indexRouter = require('./routes/index');
@@ -34,6 +35,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(token);
+app.use(fileUpload());
 
 // 우리가 직접 생성한 라우터를 연결하는 구간
 app.use('/', indexRouter);

@@ -48,6 +48,8 @@ model Profile {
   id        Int       @id @default(autoincrement())
   /// 닉네임
   name      String
+  /// 이미지
+  image     String?
   /// 클럽 고유 아이디
   clubId    Int
   /// 유저 고유 아이디

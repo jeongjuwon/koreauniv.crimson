@@ -5,7 +5,7 @@ const prismaClient = require('../libs/prisma');
 
 /* GET users listing. */
 router.post('/', async function (req, res, next) {
-  const {clubId: orgClubId, title, content} = req.body;
+  const {clubId: orgClubId, articleId, title, content} = req.body;
   const {user} = req;
 
   const clubId = parseInt(orgClubId, 10);
@@ -20,14 +20,28 @@ router.post('/', async function (req, res, next) {
       },
     });
 
-    const article = await prismaClient.article.create({
-      data: {
-        clubId,
-        profileId: profile.id,
-        title,
-        content,
-      },
-    });
+    let article;
+
+    if (articleId) {
+      article = await prismaClient.article.update({
+        data: {
+          title,
+          content,
+        },
+        where: {
+          id: articleId,
+        },
+      });
+    } else {
+      article = await prismaClient.article.create({
+        data: {
+          clubId,
+          profileId: profile.id,
+          title,
+          content,
+        },
+      });
+    }
 
     res.json(article);
   } catch (e) {
