@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useCallback, useState} from 'react';
 import {
   KeyboardAvoidingView,
@@ -7,16 +8,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 
 import PublicText from '../components/PublicText';
 import CustomTextInput from '../components/TextInput';
+import tokenState from '../states/atoms/tokenState';
 
 const SignInScreen = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {saveUserToken} = route.params;
+  const setTokenState = useSetRecoilState(tokenState);
 
   // useEffect, useState, useMemo, useCallback, ..
+  const saveUserToken = useCallback(
+    async token => {
+      // async storage에 저장
+      await AsyncStorage.setItem('token', token);
+      setTokenState(token);
+    },
+    [setTokenState],
+  );
 
   const onSignIn = useCallback(async () => {
     // API 호출을 할겁니다..

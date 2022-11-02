@@ -7,36 +7,40 @@ import dayjs from 'dayjs';
 import WriteCommentInput from '../components/WriteCommentInput';
 import ViewArticle from '../components/ViewArticle';
 import ProfileImage from '../components/ProfileImage';
+import ViewArticleHeader from '../components/ViewArticleHeader';
+import {useFocusEffect} from '@react-navigation/native';
 
 const ViewArticleScreen = ({navigation, route}) => {
-  const {articleId, profile} = route.params;
+  const {articleId, clubId, profile, initArticles} = route.params;
   const [article, setArticle] = useState({});
   const [comments, setComments] = useState([]);
 
-  useEffect(() => {
-    async function init() {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const response = await fetch(
-          `http://localhost:3000/article/${articleId}`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
+  useFocusEffect(
+    useCallback(() => {
+      async function init() {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          const response = await fetch(
+            `http://localhost:3000/article/${articleId}`,
+            {
+              method: 'GET',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
             },
-          },
-        );
-        const json = await response.json();
-        console.log(json);
-        setArticle(json);
-      } catch (e) {
-        console.log(e);
+          );
+          const json = await response.json();
+          console.log(json);
+          setArticle(json);
+        } catch (e) {
+          console.log(e);
+        }
       }
-    }
-    init();
-  }, [articleId]);
+      init();
+    }, [articleId]),
+  );
 
   const initComment = useCallback(async () => {
     try {
@@ -87,22 +91,29 @@ const ViewArticleScreen = ({navigation, route}) => {
   }, []);
 
   return (
-    <ScreenContainer style={{borderWidth: 0}}>
-      <FlatList
-        ListHeaderComponent={<ViewArticle article={article} />}
-        data={comments}
-        style={flatListStyles.flatList}
-        renderItem={renderItem}
-        contentInset={{
-          bottom: 20,
-        }}
-      />
-      <WriteCommentInput
+    <>
+      <ViewArticleHeader
         articleId={articleId}
-        profile={profile}
-        onSave={onSave}
+        clubId={clubId}
+        initArticles={initArticles}
       />
-    </ScreenContainer>
+      <ScreenContainer style={{borderWidth: 0}}>
+        <FlatList
+          ListHeaderComponent={<ViewArticle article={article} />}
+          data={comments}
+          style={flatListStyles.flatList}
+          renderItem={renderItem}
+          contentInset={{
+            bottom: 20,
+          }}
+        />
+        <WriteCommentInput
+          articleId={articleId}
+          profile={profile}
+          onSave={onSave}
+        />
+      </ScreenContainer>
+    </>
   );
 };
 

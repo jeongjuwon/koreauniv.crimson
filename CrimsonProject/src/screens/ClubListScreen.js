@@ -1,9 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ImageBackground, Pressable, ScrollView, StyleSheet} from 'react-native';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 
 import PublicText from '../components/PublicText';
 import ScreenContainer from '../components/ScreenContainer';
+import profileState from '../states/atoms/profileState';
 
 // image ex) "/images/student_council.jpg"
 const ClubListItem = ({image, name, onPress}) => {
@@ -20,6 +22,7 @@ const ClubListItem = ({image, name, onPress}) => {
 
 const ClubListScreen = ({navigation, route}) => {
   const [clubs, setClubs] = useState([]);
+  const setProfileState = useSetRecoilState(profileState);
 
   useEffect(() => {
     async function init() {
@@ -48,7 +51,6 @@ const ClubListScreen = ({navigation, route}) => {
         },
       );
       const profile = await response.json();
-
       console.log('profile', profile);
       // {"id": null}
 
@@ -57,13 +59,14 @@ const ClubListScreen = ({navigation, route}) => {
           clubId,
         });
       } else {
+        setProfileState(profile);
         navigation.navigate('ClubHome', {
           clubId,
           profile,
         });
       }
     },
-    [navigation],
+    [navigation, setProfileState],
   );
 
   return (

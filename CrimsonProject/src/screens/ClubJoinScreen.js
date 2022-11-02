@@ -1,44 +1,48 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useCallback, useState } from 'react';
-import { Alert, Image, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {useRecoilState} from 'recoil';
+import CancelButton from '../components/CancelButton';
+import GrayButton from '../components/GrayButton';
+import ProfileImage from '../components/ProfileImage';
 
 import SaveButton from '../components/SaveButton';
 import ScreenContainer from '../components/ScreenContainer';
 import CustomTextInput from '../components/TextInput';
+import {getProfileImageUrl} from '../libs/remoteFiles';
+import profileState from '../states/atoms/profileState';
+import tokenState from '../states/atoms/tokenState';
 
 const DEFAULT_PROFILE_IMAGE = require('../assets/images/default-profile.png');
 
 const ClubJoinScreen = ({navigation, route}) => {
   const {clubId} = route.params;
+  const [profileImage, setProfileImage] = useState('');
+  const [nickName, setNickName] = useState('');
+  const [profileStateValue, setProfileState] = useRecoilState(profileState);
+  const [tokenStateValue, setTokenState] = useRecoilState(tokenState);
+
+  useEffect(() => {
+    setNickName(profileStateValue.name);
+  }, [profileStateValue.name]);
 
   const onUploadProfileImage = useCallback(async () => {
     const response = await launchImageLibrary({
       mediaType: 'photo',
+      selectionLimit: 1,
     });
 
+    setProfileImage(response.assets[0]);
     console.log(response);
-
-    // 폼을 통해 폼데이터를 넘기는 로직이 후에 들어간다. 이부분에서 서버에 업로드를 하는 것.
-    // conse uploadResponse = await fetch('http://localhost:3000/upload', {
-    //   method: 'POST',
-    //   body: {
-    //     fileName: response.uri
-    //   }
-    // });
-    // const uploaded = await uploadResponse.json()
-
-    // uploaded.name: http://localhost:3000/images/user_files/99371282-6F12-402A-82CF-51C2F60B2065.jpg'
-
-    // const response = await launchCamera({
-    //   mediaType: 'photo',
-    // });
-    // console.log(response);
   }, []);
-
-  const [profileImage, setProfileImage] = useState('');
-  const [nickName, setNickName] = useState('');
-
   const onSave = useCallback(async () => {
     const token = await AsyncStorage.getItem('token');
 
@@ -51,10 +55,12 @@ const ClubJoinScreen = ({navigation, route}) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          profileId: profileStateValue.id,
           nickName,
           clubId,
         }),
       });
+
       const json = await response.json();
       console.log(json);
       if (json.status === 400) {
@@ -64,21 +70,102 @@ const ClubJoinScreen = ({navigation, route}) => {
           },
         ]);
       }
+
+      if (!profileImage) {
+        setProfileState(json);
+
+        navigation.goBack();
+        return;
+      }
+      const data = new FormData();
+      data.append('photo', {
+        name: profileImage.fileName,
+        type: profileImage.type,
+        uri:
+          Platform.OS === 'ios'
+            ? profileImage.uri.replace('file://', '')
+            : profileImage.uri,
+      });
+      console.log('json', json);
+      data.append('profileId', json.id);
+
+      const uploadResponse = await fetch(
+        'http://localhost:3000/profile/upload',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: data,
+        },
+      );
+      const uploadJson = await uploadResponse.json();
+      console.log('uploadJson', uploadJson);
+
+      setProfileState({
+        ...json,
+        image: uploadJson.image,
+      });
+
       navigation.goBack();
     } catch (e) {
       console.log(e);
     }
-  }, [clubId, navigation, nickName]);
+  }, [
+    clubId,
+    navigation,
+    nickName,
+    profileImage,
+    profileStateValue.id,
+    setProfileState,
+  ]);
+
+  const onCancel = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const onDeleteProfile = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:3000/profile', {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${tokenStateValue}`,
+        },
+        body: JSON.stringify({
+          profileId: profileStateValue.id,
+        }),
+      });
+
+      const json = await response.json();
+      console.log('json', json);
+      setProfileState({});
+
+      navigation.popToTop();
+      Alert.alert('알림', '탈퇴되었습니다.', [
+        {
+          text: '확인',
+        },
+      ]);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [navigation, profileStateValue.id, setProfileState, tokenStateValue]);
 
   return (
     <ScreenContainer>
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <TouchableOpacity onPress={onUploadProfileImage}>
-          <Image
-            source={profileImage ? {uri: profileImage} : DEFAULT_PROFILE_IMAGE}
-            style={styles.profileImage}
+        <TouchableOpacity
+          onPress={onUploadProfileImage}
+          style={styles.profileContainer}>
+          <ProfileImage
+            size={100}
+            uri={
+              profileImage.uri || getProfileImageUrl(profileStateValue.image)
+            }
           />
         </TouchableOpacity>
         <CustomTextInput
@@ -86,7 +173,16 @@ const ClubJoinScreen = ({navigation, route}) => {
           value={nickName}
           setValue={setNickName}
         />
-        <SaveButton title="클럽 가입하기" onSave={onSave} />
+        {profileStateValue.id && (
+          <SaveButton title="클럽 정보수정" onSave={onSave} />
+        )}
+        {!profileStateValue.id && (
+          <SaveButton title="클럽 가입하기" onSave={onSave} />
+        )}
+        <CancelButton title="취소" onSave={onCancel} />
+        {profileStateValue.id && (
+          <GrayButton title="클럽 탈퇴하기" onSave={onDeleteProfile} />
+        )}
       </KeyboardAvoidingView>
     </ScreenContainer>
   );
@@ -98,14 +194,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  profileContainer: {
+    alignItems: 'center',
     marginBottom: 50,
-    alignSelf: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
   },
 });
 

@@ -1,15 +1,43 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useCallback, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
+import {useRecoilState} from 'recoil';
+import CancelButton from '../components/CancelButton';
 
 import SaveButton from '../components/SaveButton';
 import ScreenContainer from '../components/ScreenContainer';
 import CustomTextInput from '../components/TextInput';
+import tokenState from '../states/atoms/tokenState';
 
 const WriteArticleScreen = ({navigation, route}) => {
-  const {clubId, initArticles} = route.params;
+  const {clubId, articleId, initArticles} = route.params;
+  const [tokenStateValue, setTokenState] = useRecoilState(tokenState);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+
+  useEffect(() => {
+    async function init() {
+      console.log('articleId', articleId);
+
+      const response = await fetch(
+        `http://localhost:3000/article/${articleId}`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${tokenStateValue}`,
+          },
+        },
+      );
+
+      const json = await response.json();
+      setTitle(json.title);
+      setContent(json.content);
+      // console.log(json);
+    }
+    init();
+  }, [articleId, tokenStateValue]);
 
   const onSave = useCallback(async () => {
     try {
@@ -22,6 +50,7 @@ const WriteArticleScreen = ({navigation, route}) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          articleId,
           clubId,
           title,
           content,
@@ -34,7 +63,11 @@ const WriteArticleScreen = ({navigation, route}) => {
     } catch (e) {
       console.log(e);
     }
-  }, [clubId, content, initArticles, navigation, title]);
+  }, [articleId, clubId, content, initArticles, navigation, title]);
+
+  const onCancel = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
   return (
     <ScreenContainer>
@@ -55,6 +88,7 @@ const WriteArticleScreen = ({navigation, route}) => {
           style={styles.contentTextInput}
         />
         <SaveButton title="저장하기" onSave={onSave} />
+        <CancelButton title="취소하기" onSave={onCancel} />
       </KeyboardAvoidingView>
     </ScreenContainer>
   );

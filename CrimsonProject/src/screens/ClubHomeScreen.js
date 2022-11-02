@@ -86,11 +86,13 @@ const ClubHomeScreen = ({navigation, route}) => {
   const onPressArticle = useCallback(
     articleId => () => {
       navigation.navigate('ViewArticle', {
+        clubId,
         articleId,
         profile,
+        initArticles,
       });
     },
-    [navigation, profile],
+    [clubId, initArticles, navigation, profile],
   );
 
   return (
