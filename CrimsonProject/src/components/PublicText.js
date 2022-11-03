@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, Platform} from 'react-native';
 
 const PublicText = ({children, style}) => {
   return <Text style={[styles.defaultStyle, style]}>{children}</Text>;
@@ -8,7 +8,9 @@ const PublicText = ({children, style}) => {
 const styles = StyleSheet.create({
   defaultStyle: {
     color: '#191919',
-    fontFamily: 'Nanum GoDigANiGoGoDing',
+    fontFamily:
+      Platform.OS === 'ios' ? 'Nanum GoDigANiGoGoDing' : 'GoDigANiGoGoDing',
+    fontSize: 20,
   },
 });
 

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState, useEffect} from 'react';
 import {
   Alert,
   StyleSheet,
@@ -7,10 +7,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import commentState from '../states/atoms/commentState';
+import tokenState from '../states/atoms/tokenState';
 import PublicText from './PublicText';
+import CustomTextInput from './TextInput';
 
-const WriteCommentInput = ({articleId, profile, onSave}) => {
+const WriteCommentInput = ({articleId, profile, onSave, onDelete}) => {
+  const [commentStateValue, setCommentState] = useRecoilState(commentState);
+  const tokenStateValue = useRecoilValue(tokenState);
+
   const [content, setContent] = useState('');
+
+  useEffect(() => {
+    console.log('commentStateValue', commentStateValue);
+    if (commentStateValue) {
+      setContent(commentStateValue.content);
+    }
+  }, [commentStateValue]);
 
   const onPress = useCallback(async () => {
     try {
@@ -22,47 +36,106 @@ const WriteCommentInput = ({articleId, profile, onSave}) => {
         ]);
         return;
       }
-      const token = await AsyncStorage.getItem('token');
       const response = await fetch('http://localhost:3000/comment', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${tokenStateValue}`,
         },
         body: JSON.stringify({
           articleId,
           clubId: profile.clubId,
           authorId: profile.id,
           content,
+          commentId: commentStateValue ? commentStateValue.id : null,
         }),
       });
       const json = await response.json();
       console.log('json', json);
       setContent('');
+      setCommentState(null);
 
       if (onSave) {
         onSave();
       }
     } catch (e) {}
-  }, [articleId, content, profile, onSave]);
+  }, [
+    profile,
+    tokenStateValue,
+    articleId,
+    content,
+    commentStateValue,
+    setCommentState,
+    onSave,
+  ]);
+
+  const onDeleteComment = useCallback(async () => {
+    try {
+      if (!commentStateValue) {
+        Alert.alert('알림', '선택된 댓글이 없습니다.', [
+          {
+            text: '확인',
+          },
+        ]);
+        return;
+      }
+
+      const response = await fetch(
+        `http://localhost:3000/comment/${commentStateValue.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${tokenStateValue}`,
+          },
+        },
+      );
+      const json = await response.json();
+      console.log(json);
+      setContent('');
+      setCommentState(null);
+
+      if (onDelete) {
+        onDelete();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [commentStateValue, onDelete, setCommentState, tokenStateValue]);
 
   const isDisabled = useMemo(() => content.length < 10, [content.length]);
 
   return (
     <View style={styles.container}>
-      <TextInput
+      <CustomTextInput
         style={styles.textInput}
         multiline
         value={content}
-        onChangeText={setContent}
+        setValue={setContent}
       />
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={onPress}
-        disabled={isDisabled}>
-        <PublicText style={styles.btnTitle(isDisabled)}>등록</PublicText>
-      </TouchableOpacity>
+      {commentStateValue && (
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={onPress}
+          disabled={isDisabled}>
+          <PublicText style={styles.btnTitle(isDisabled)}>수정</PublicText>
+        </TouchableOpacity>
+      )}
+      {commentStateValue && (
+        <TouchableOpacity style={styles.btn} onPress={onDeleteComment}>
+          <PublicText style={styles.btnTitle(false)}>삭제</PublicText>
+        </TouchableOpacity>
+      )}
+      {!commentStateValue && (
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={onPress}
+          disabled={isDisabled}>
+          <PublicText style={styles.btnTitle(isDisabled)}>등록</PublicText>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

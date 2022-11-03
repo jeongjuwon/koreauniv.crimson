@@ -1,25 +1,26 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, Image, ScrollView, FlatList} from 'react-native';
-import PublicText from '../components/PublicText';
-import ScreenContainer from '../components/ScreenContainer';
-import dayjs from 'dayjs';
-import WriteCommentInput from '../components/WriteCommentInput';
-import ViewArticle from '../components/ViewArticle';
-import ProfileImage from '../components/ProfileImage';
-import ViewArticleHeader from '../components/ViewArticleHeader';
 import {useFocusEffect} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {FlatList, StyleSheet} from 'react-native';
+import {useRecoilValue} from 'recoil';
+import CommentListItem from '../components/CommentListItem';
+import FullScreenLoadingIndicator from '../components/FullScreenLoadingIndicator';
+import ScreenContainer from '../components/ScreenContainer';
+import ViewArticle from '../components/ViewArticle';
+import ViewArticleHeader from '../components/ViewArticleHeader';
+import WriteCommentInput from '../components/WriteCommentInput';
+import tokenState from '../states/atoms/tokenState';
 
 const ViewArticleScreen = ({navigation, route}) => {
   const {articleId, clubId, profile, initArticles} = route.params;
-  const [article, setArticle] = useState({});
+  const tokenStateValue = useRecoilValue(tokenState);
+  const [article, setArticle] = useState(null);
   const [comments, setComments] = useState([]);
 
   useFocusEffect(
     useCallback(() => {
       async function init() {
         try {
-          const token = await AsyncStorage.getItem('token');
           const response = await fetch(
             `http://localhost:3000/article/${articleId}`,
             {
@@ -27,19 +28,19 @@ const ViewArticleScreen = ({navigation, route}) => {
               headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${tokenStateValue}`,
               },
             },
           );
           const json = await response.json();
-          console.log(json);
+          console.log('json', json);
           setArticle(json);
         } catch (e) {
           console.log(e);
         }
       }
       init();
-    }, [articleId]),
+    }, [articleId, tokenStateValue]),
   );
 
   const initComment = useCallback(async () => {
@@ -72,23 +73,17 @@ const ViewArticleScreen = ({navigation, route}) => {
     initComment();
   }, [initComment]);
 
+  const onDelete = useCallback(() => {
+    initComment();
+  }, [initComment]);
+
   const renderItem = useCallback(({item}) => {
-    return (
-      <View style={listItemStyles.container}>
-        <View style={listItemStyles.profileContainer}>
-          <ProfileImage size={30} style={listItemStyles.profileImage} />
-          <PublicText style={listItemStyles.profileName}>
-            {item.profile.name}
-          </PublicText>
-        </View>
-        <View style={listItemStyles.contentContainer}>
-          <PublicText style={listItemStyles.content}>
-            {item.content || '내용이 없습니다.'}
-          </PublicText>
-        </View>
-      </View>
-    );
+    return <CommentListItem item={item} />;
   }, []);
+
+  if (!article) {
+    return <FullScreenLoadingIndicator color="#ccc" size={40} />;
+  }
 
   return (
     <>
@@ -97,7 +92,7 @@ const ViewArticleScreen = ({navigation, route}) => {
         clubId={clubId}
         initArticles={initArticles}
       />
-      <ScreenContainer style={{borderWidth: 0}}>
+      <ScreenContainer style={{backgroundColor: '#fff'}}>
         <FlatList
           ListHeaderComponent={<ViewArticle article={article} />}
           data={comments}
@@ -111,32 +106,12 @@ const ViewArticleScreen = ({navigation, route}) => {
           articleId={articleId}
           profile={profile}
           onSave={onSave}
+          onDelete={onDelete}
         />
       </ScreenContainer>
     </>
   );
 };
-
-const listItemStyles = StyleSheet.create({
-  container: {
-    borderBottomWidth: 0.2,
-    borderBottomColor: '#ccc',
-    paddingVertical: 10,
-  },
-  profileContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileImage: {
-    marginRight: 20,
-  },
-  contentContainer: {
-    marginLeft: 50,
-  },
-  content: {
-    fontSize: 20,
-  },
-});
 
 const flatListStyles = StyleSheet.create({
   flatList: {

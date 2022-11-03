@@ -4,12 +4,16 @@ import PublicText from './PublicText';
 
 import dayjs from 'dayjs';
 import ProfileImage from './ProfileImage';
+import {getProfileImageUrl} from '../libs/remoteFiles';
 
 const ViewArticle = ({article}) => {
   return (
     <>
       <View style={styles.profileContainer}>
-        <ProfileImage size={70} />
+        <ProfileImage
+          size={70}
+          uri={getProfileImageUrl(article.profile.image)}
+        />
         <View style={styles.profileNameContainer}>
           <PublicText style={styles.profileName}>
             {article.profile ? article.profile.name : '-'}

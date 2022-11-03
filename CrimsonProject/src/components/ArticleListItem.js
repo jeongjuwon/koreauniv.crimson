@@ -3,6 +3,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
 import {Image, Pressable, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import ProfileImage from './ProfileImage';
+import {getProfileImageUrl} from '../libs/remoteFiles';
 
 import PublicText from './PublicText';
 
@@ -27,8 +29,8 @@ const ArticleListItem = ({
       style={listItemStyles.container(index, paddingBottom)}
       onPress={onPressArticle}>
       <View style={listItemStyles.profileContainer}>
-        <Image
-          source={profileImage ? {uri: profileImage} : DEFAULT_PROFILE_IMAGE}
+        <ProfileImage
+          uri={getProfileImageUrl(profileImage)}
           style={listItemStyles.profileImage}
         />
         <View style={listItemStyles.authorContainer}>
@@ -67,12 +69,12 @@ const listItemStyles = StyleSheet.create({
   },
   title: {
     marginTop: 20,
-    fontSize: 15,
+    fontSize: 20,
     fontWeight: '600',
   },
   content: {
     marginTop: 20,
-    fontSize: 15,
+    fontSize: 20,
   },
   contentContainer: {
     marginLeft: 70,

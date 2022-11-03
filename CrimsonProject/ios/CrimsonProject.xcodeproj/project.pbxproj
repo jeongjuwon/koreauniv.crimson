@@ -12,18 +12,19 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		7699B88040F8A987B510C191 /* libPods-CrimsonProject-CrimsonProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-CrimsonProject-CrimsonProjectTests.a */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		19F4A198F19046D0804094C3 /* GoDigANiGoGoDing.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FBB2E73675A14B938D2961E2 /* GoDigANiGoGoDing.ttf */; };
-		6131C8C47792416DAF832BCD /* NanumGothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B92F1586DA0459E88367747 /* NanumGothic.ttf */; };
-		D346E64B446A439B8A7882FF /* NanumGothicBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD9E41155934465396D17D2E /* NanumGothicBold.ttf */; };
-		8021323DB02A402A80886D58 /* NanumGothicExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CCC6C6879DDE49849992CABB /* NanumGothicExtraBold.ttf */; };
-		90C6547317CA4F4182E586B6 /* NanumGothicLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07A1E6CBCDC84D848EE4C0D0 /* NanumGothicLight.ttf */; };
-		41C3D60EB9A747D1AA982B1B /* NanumSquareNeo-aLt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B5DC219F5E514D18B7680D66 /* NanumSquareNeo-aLt.ttf */; };
-		7BCB80535094418DA8DA6893 /* NanumSquareNeo-bRg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 01DD238A3D6D4CABB10A292A /* NanumSquareNeo-bRg.ttf */; };
 		40DFE3CCEC7D4D939B4907D5 /* NanumSquareNeo-cBd.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF8DE94A4D4D4E06A67B5D46 /* NanumSquareNeo-cBd.ttf */; };
+		41C3D60EB9A747D1AA982B1B /* NanumSquareNeo-aLt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B5DC219F5E514D18B7680D66 /* NanumSquareNeo-aLt.ttf */; };
 		4CF32D6359114A7394E538C6 /* NanumSquareNeo-dEb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E941202E99C24AC0B9EAD47D /* NanumSquareNeo-dEb.ttf */; };
+		534ADDC12913562C00DE5A54 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 534ADDC02913562C00DE5A54 /* BootSplash.storyboard */; };
+		6131C8C47792416DAF832BCD /* NanumGothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B92F1586DA0459E88367747 /* NanumGothic.ttf */; };
+		7699B88040F8A987B510C191 /* libPods-CrimsonProject-CrimsonProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-CrimsonProject-CrimsonProjectTests.a */; };
+		7BCB80535094418DA8DA6893 /* NanumSquareNeo-bRg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 01DD238A3D6D4CABB10A292A /* NanumSquareNeo-bRg.ttf */; };
+		8021323DB02A402A80886D58 /* NanumGothicExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CCC6C6879DDE49849992CABB /* NanumGothicExtraBold.ttf */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		90C6547317CA4F4182E586B6 /* NanumGothicLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07A1E6CBCDC84D848EE4C0D0 /* NanumGothicLight.ttf */; };
 		C0172BABD83A47A3B3B9C69B /* NanumSquareNeo-eHv.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D0ECE18901E4E7BB922DE2B /* NanumSquareNeo-eHv.ttf */; };
+		D346E64B446A439B8A7882FF /* NanumGothicBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD9E41155934465396D17D2E /* NanumGothicBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		00E356EE1AD99517003FC87E /* CrimsonProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CrimsonProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* CrimsonProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CrimsonProjectTests.m; sourceTree = "<group>"; };
+		01DD238A3D6D4CABB10A292A /* NanumSquareNeo-bRg.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NanumSquareNeo-bRg.ttf"; path = "../src/assets/fonts/NanumSquareNeo-bRg.ttf"; sourceTree = "<group>"; };
+		07A1E6CBCDC84D848EE4C0D0 /* NanumGothicLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumGothicLight.ttf; path = ../src/assets/fonts/NanumGothicLight.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* CrimsonProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrimsonProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = CrimsonProject/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = CrimsonProject/AppDelegate.mm; sourceTree = "<group>"; };
@@ -47,23 +50,22 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CrimsonProject/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CrimsonProject/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-CrimsonProject-CrimsonProjectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CrimsonProject-CrimsonProjectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B92F1586DA0459E88367747 /* NanumGothic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumGothic.ttf; path = ../src/assets/fonts/NanumGothic.ttf; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-CrimsonProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrimsonProject.debug.xcconfig"; path = "Target Support Files/Pods-CrimsonProject/Pods-CrimsonProject.debug.xcconfig"; sourceTree = "<group>"; };
+		534ADDC02913562C00DE5A54 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = CrimsonProject/BootSplash.storyboard; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-CrimsonProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrimsonProject.release.xcconfig"; path = "Target Support Files/Pods-CrimsonProject/Pods-CrimsonProject.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-CrimsonProject-CrimsonProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrimsonProject-CrimsonProjectTests.debug.xcconfig"; path = "Target Support Files/Pods-CrimsonProject-CrimsonProjectTests/Pods-CrimsonProject-CrimsonProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-CrimsonProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CrimsonProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = CrimsonProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-CrimsonProject-CrimsonProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrimsonProject-CrimsonProjectTests.release.xcconfig"; path = "Target Support Files/Pods-CrimsonProject-CrimsonProjectTests/Pods-CrimsonProject-CrimsonProjectTests.release.xcconfig"; sourceTree = "<group>"; };
+		8D0ECE18901E4E7BB922DE2B /* NanumSquareNeo-eHv.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NanumSquareNeo-eHv.ttf"; path = "../src/assets/fonts/NanumSquareNeo-eHv.ttf"; sourceTree = "<group>"; };
+		B5DC219F5E514D18B7680D66 /* NanumSquareNeo-aLt.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NanumSquareNeo-aLt.ttf"; path = "../src/assets/fonts/NanumSquareNeo-aLt.ttf"; sourceTree = "<group>"; };
+		CCC6C6879DDE49849992CABB /* NanumGothicExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumGothicExtraBold.ttf; path = ../src/assets/fonts/NanumGothicExtraBold.ttf; sourceTree = "<group>"; };
+		CD9E41155934465396D17D2E /* NanumGothicBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumGothicBold.ttf; path = ../src/assets/fonts/NanumGothicBold.ttf; sourceTree = "<group>"; };
+		DF8DE94A4D4D4E06A67B5D46 /* NanumSquareNeo-cBd.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NanumSquareNeo-cBd.ttf"; path = "../src/assets/fonts/NanumSquareNeo-cBd.ttf"; sourceTree = "<group>"; };
+		E941202E99C24AC0B9EAD47D /* NanumSquareNeo-dEb.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NanumSquareNeo-dEb.ttf"; path = "../src/assets/fonts/NanumSquareNeo-dEb.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		FBB2E73675A14B938D2961E2 /* GoDigANiGoGoDing.ttf */ = {isa = PBXFileReference; name = "GoDigANiGoGoDing.ttf"; path = "../src/assets/fonts/GoDigANiGoGoDing.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		1B92F1586DA0459E88367747 /* NanumGothic.ttf */ = {isa = PBXFileReference; name = "NanumGothic.ttf"; path = "../src/assets/fonts/NanumGothic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		CD9E41155934465396D17D2E /* NanumGothicBold.ttf */ = {isa = PBXFileReference; name = "NanumGothicBold.ttf"; path = "../src/assets/fonts/NanumGothicBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		CCC6C6879DDE49849992CABB /* NanumGothicExtraBold.ttf */ = {isa = PBXFileReference; name = "NanumGothicExtraBold.ttf"; path = "../src/assets/fonts/NanumGothicExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		07A1E6CBCDC84D848EE4C0D0 /* NanumGothicLight.ttf */ = {isa = PBXFileReference; name = "NanumGothicLight.ttf"; path = "../src/assets/fonts/NanumGothicLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B5DC219F5E514D18B7680D66 /* NanumSquareNeo-aLt.ttf */ = {isa = PBXFileReference; name = "NanumSquareNeo-aLt.ttf"; path = "../src/assets/fonts/NanumSquareNeo-aLt.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		01DD238A3D6D4CABB10A292A /* NanumSquareNeo-bRg.ttf */ = {isa = PBXFileReference; name = "NanumSquareNeo-bRg.ttf"; path = "../src/assets/fonts/NanumSquareNeo-bRg.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		DF8DE94A4D4D4E06A67B5D46 /* NanumSquareNeo-cBd.ttf */ = {isa = PBXFileReference; name = "NanumSquareNeo-cBd.ttf"; path = "../src/assets/fonts/NanumSquareNeo-cBd.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E941202E99C24AC0B9EAD47D /* NanumSquareNeo-dEb.ttf */ = {isa = PBXFileReference; name = "NanumSquareNeo-dEb.ttf"; path = "../src/assets/fonts/NanumSquareNeo-dEb.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8D0ECE18901E4E7BB922DE2B /* NanumSquareNeo-eHv.ttf */ = {isa = PBXFileReference; name = "NanumSquareNeo-eHv.ttf"; path = "../src/assets/fonts/NanumSquareNeo-eHv.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FBB2E73675A14B938D2961E2 /* GoDigANiGoGoDing.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GoDigANiGoGoDing.ttf; path = ../src/assets/fonts/GoDigANiGoGoDing.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 		13B07FAE1A68108700A75B9A /* CrimsonProject */ = {
 			isa = PBXGroup;
 			children = (
+				534ADDC02913562C00DE5A54 /* BootSplash.storyboard */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -170,7 +173,7 @@
 			sourceTree = "<group>";
 		};
 		FAD9F35B38AF46FB978C59F1 /* Resources */ = {
-			isa = "PBXGroup";
+			isa = PBXGroup;
 			children = (
 				FBB2E73675A14B938D2961E2 /* GoDigANiGoGoDing.ttf */,
 				1B92F1586DA0459E88367747 /* NanumGothic.ttf */,
@@ -185,7 +188,6 @@
 			);
 			name = Resources;
 			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -283,6 +285,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				534ADDC12913562C00DE5A54 /* BootSplash.storyboard in Resources */,
 				19F4A198F19046D0804094C3 /* GoDigANiGoGoDing.ttf in Resources */,
 				6131C8C47792416DAF832BCD /* NanumGothic.ttf in Resources */,
 				D346E64B446A439B8A7882FF /* NanumGothicBold.ttf in Resources */,

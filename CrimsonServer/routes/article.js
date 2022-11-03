@@ -58,6 +58,8 @@ router.get('/:articleId', async function (req, res, next) {
         profile: {
           select: {
             name: true,
+            image: true,
+            id: true,
           },
         },
         id: true,
@@ -82,4 +84,18 @@ router.get('/:articleId', async function (req, res, next) {
   }
 });
 
+router.delete('/:articleId', async function (req, res, next) {
+  const {articleId} = req.params;
+
+  try {
+    const article = await prismaClient.article.delete({
+      where: {
+        id: parseInt(articleId, 10),
+      },
+    });
+    res.json(article);
+  } catch (e) {
+    next(e);
+  }
+});
 module.exports = router;

@@ -17,6 +17,7 @@ router.get('/:articleId', async function (req, res, next) {
         profile: {
           select: {
             name: true,
+            image: true,
           },
         },
       },

@@ -16,6 +16,8 @@ router.get('/:clubId', async function (req, res, next) {
         profile: {
           select: {
             name: true,
+            image: true,
+            id: true,
           },
         },
       },

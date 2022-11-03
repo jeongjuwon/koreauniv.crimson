@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TextInput} from 'react-native';
+import {StyleSheet, TextInput, Platform} from 'react-native';
 
 const CustomTextInput = ({value, setValue, placeholder, multiline, style}) => {
   return (
@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 30,
     paddingHorizontal: 20,
-    fontFamily: 'Nanum GoDigANiGoGoDing',
+    fontFamily:
+      Platform.OS === 'ios' ? 'Nanum GoDigANiGoGoDing' : 'GoDigANiGoGoDing',
   },
 });
 

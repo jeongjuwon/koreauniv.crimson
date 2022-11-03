@@ -3,6 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
 import {useRecoilState} from 'recoil';
 import CancelButton from '../components/CancelButton';
+import GrayButton from '../components/GrayButton';
 
 import SaveButton from '../components/SaveButton';
 import ScreenContainer from '../components/ScreenContainer';
@@ -41,13 +42,12 @@ const WriteArticleScreen = ({navigation, route}) => {
 
   const onSave = useCallback(async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
       const response = await fetch('http://localhost:3000/article', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${tokenStateValue}`,
         },
         body: JSON.stringify({
           articleId,
@@ -63,7 +63,35 @@ const WriteArticleScreen = ({navigation, route}) => {
     } catch (e) {
       console.log(e);
     }
-  }, [articleId, clubId, content, initArticles, navigation, title]);
+  }, [
+    articleId,
+    clubId,
+    content,
+    initArticles,
+    navigation,
+    title,
+    tokenStateValue,
+  ]);
+
+  const onDelete = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/article/${articleId}`,
+        {
+          method: 'DELETE',
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${tokenStateValue}`,
+        },
+      );
+      const json = await response.json();
+      console.log('json', json);
+      initArticles();
+      navigation.pop(2);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [articleId, tokenStateValue]);
 
   const onCancel = useCallback(() => {
     navigation.goBack();
@@ -87,7 +115,9 @@ const WriteArticleScreen = ({navigation, route}) => {
           multiline
           style={styles.contentTextInput}
         />
-        <SaveButton title="저장하기" onSave={onSave} />
+        {!articleId && <SaveButton title="저장하기" onSave={onSave} />}
+        {articleId && <SaveButton title="수정하기" onSave={onSave} />}
+        {articleId && <GrayButton title="삭제하기" onSave={onDelete} />}
         <CancelButton title="취소하기" onSave={onCancel} />
       </KeyboardAvoidingView>
     </ScreenContainer>

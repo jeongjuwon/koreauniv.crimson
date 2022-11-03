@@ -114,6 +114,7 @@ const ClubHomeScreen = ({navigation, route}) => {
               paddingBottom={articles.length - 1 === index ? inset.bottom : 0}
               index={index}
               authorName={item.profile.name}
+              profileImage={item.profile.image}
               title={item.title}
               content={item.content}
               createdAt={item.createdAt}

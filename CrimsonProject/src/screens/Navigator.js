@@ -10,6 +10,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useState} from 'react';
 import {RecoilRoot, useRecoilState} from 'recoil';
+import RNBootSplash from 'react-native-bootsplash';
 import ClubHomeHeader from '../components/ClubHomeHeader';
 
 import ClubHomeScreen from './ClubHomeScreen';
@@ -21,10 +22,12 @@ import ViewArticleScreen from './ViewArticleScreen';
 import WriteArticleScreen from './WriteArticleScreen';
 import tokenState from '../states/atoms/tokenState';
 import ViewArticleHeader from '../components/ViewArticleHeader';
+import FullScreenLoadingIndicator from '../components/FullScreenLoadingIndicator';
 
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [tokenStateValue, setTokenState] = useRecoilState(tokenState);
   const [clubId, setClubId] = useState('');
 
@@ -32,12 +35,21 @@ const Navigator = () => {
     async function init() {
       const token = await AsyncStorage.getItem('token');
       setTokenState(token);
+      setIsLoading(false);
     }
     init();
   }, [setTokenState]);
 
+  const onReady = useCallback(() => {
+    RNBootSplash.hide();
+  }, []);
+
+  if (isLoading) {
+    return <FullScreenLoadingIndicator size={20} color={'#ccc'} />;
+  }
+
   return (
-    <NavigationContainer>
+    <NavigationContainer onReady={onReady}>
       <Stack.Navigator
         initialRouteName={tokenStateValue ? 'ClubList' : 'SignIn'}>
         {tokenStateValue ? (

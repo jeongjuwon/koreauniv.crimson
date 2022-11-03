@@ -18,8 +18,7 @@ const ViewArticleHeader = ({clubId, articleId, initArticles}) => {
 
   const onBack = useCallback(() => {
     navigation.goBack();
-    setProfileState({});
-  }, [navigation, setProfileState]);
+  }, [navigation]);
 
   const onEdit = useCallback(() => {
     navigation.navigate('WriteArticle', {
